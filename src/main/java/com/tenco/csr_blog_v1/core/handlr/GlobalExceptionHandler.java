@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
         return Resp.fail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<?> exApi401(UnAuthorizedException e) {
         log.warn("[WARN] 사용자 인증 유효성 실패 : " + e.getMessage());
