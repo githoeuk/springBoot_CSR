@@ -4,11 +4,13 @@ package com.tenco.csr_blog_v1.core.util;
 // 우체국 규격 상자에 담아서 택배를 보내듯이
 // 프론트엔드와 API규격 약속을 지켜서 내려 주어야 하기 때문에 설계 함.
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 // ResponseEntity의 바디 역할
 // 제네릭 <> 으로 선언
+@Data
 public class Resp<T> {
 
     private Integer status; // 상태 코드
@@ -32,7 +34,7 @@ public class Resp<T> {
 
     // status.value() -> Http : 응답상태 코드
     public static <T> ResponseEntity<Resp<T>> fail(HttpStatus status, String msg) {
-        Resp<T> resp = new Resp<>(status.value(), "실패", null);
+        Resp<T> resp = new Resp<>(status.value(), msg, null);
 
         return new ResponseEntity<>(resp, status);
     } // fail
