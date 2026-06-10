@@ -117,7 +117,7 @@ public class SecurityConfig {
                 authorizationManagerRequestMatcherRegistry
                         // 여기 경로는 ADMIN만 들어올 수 있다.
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        // 게시글 목록, 상세보기(GET) 로그인 없이 누구나 허용
+                        // GET요청인 게시글 목록, 상세보기 로그인 없이 누구나 허용
                         .requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll()
                         // 게시글  수정,삭제,작성,댓글,마이페이지는 로그인한 사용자만 허용
                         // USER , ADMIN

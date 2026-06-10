@@ -40,7 +40,7 @@ public class RespFilter {
 
         try {
             // objectMapper 객체를 사용하여 자바 객체(Resp)를 -> 예시 {"status" : 401, "msg" : ".."}
-            om.writeValueAsString(resp);
+            responseBody = om.writeValueAsString(resp);
         } catch (JsonProcessingException e) {
             log.error("JSON 변환 실패 :", e);
             responseBody = """
