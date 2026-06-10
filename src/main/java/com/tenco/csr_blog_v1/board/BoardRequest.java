@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public class BoardRequest {
 
-
+    // 게시글 쓰기용
     // 작성한 글을 엔티티로 전환
     public record SaveDTO(
             @Size(min = 1, max = 30, message = "제목은 1글자 이상 30자 이하로 작성해야 합니다.")

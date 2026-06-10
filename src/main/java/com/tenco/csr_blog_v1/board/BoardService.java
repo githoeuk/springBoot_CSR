@@ -1,5 +1,6 @@
 package com.tenco.csr_blog_v1.board;
 
+import com.tenco.csr_blog_v1.core.handlr.errors.NotFoundException;
 import com.tenco.csr_blog_v1.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,13 @@ public class BoardService {
                 .map(BoardResponse.DTO::new)        // 가공 로봇(map)이 엔티티들을 DTO로 변경한다.
                 .toList();                          // 최종 연산 단계 : 완성된 DTO들을 리스트 상자에 담는 역할을 한다
     }
+
+    public BoardResponse.DetailDTO 게시글상세보기(Integer boardId, Integer sessionUserId){
+        Board findBoard = boardRepository.findByIdJoinUserAndReplies(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+        return new BoardResponse.DetailDTO(findBoard,sessionUserId);
+    }
+
 
 
 } // end of class

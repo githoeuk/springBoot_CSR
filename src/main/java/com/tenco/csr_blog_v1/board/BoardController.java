@@ -36,6 +36,16 @@ public class BoardController {
         return Resp.ok(responseDTO);
     }
 
+    @GetMapping("/{boardId}")
+    public ResponseEntity<?> detail(@AuthenticationPrincipal User sessionUser,
+                                    @PathVariable(name = "boardId") Integer boardId){
+        Integer sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+        BoardResponse.DetailDTO responseDTO = boardService.게시글상세보기(boardId, sessionUserId);
+        return Resp.ok(responseDTO);
+
+    }
+    // /api/boards/{boardId}
+
 
 }
 
