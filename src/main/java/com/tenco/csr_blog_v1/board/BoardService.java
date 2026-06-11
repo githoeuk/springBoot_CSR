@@ -1,5 +1,6 @@
 package com.tenco.csr_blog_v1.board;
 
+import com.tenco.csr_blog_v1.core.handlr.errors.ForbiddenException;
 import com.tenco.csr_blog_v1.core.handlr.errors.NotFoundException;
 import com.tenco.csr_blog_v1.user.User;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,32 @@ public class BoardService {
         Board findBoard = boardRepository.findByIdJoinUserAndReplies(boardId)
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
         return new BoardResponse.DetailDTO(findBoard,sessionUserId);
+    }
+
+    public BoardResponse.DTO 게시글정보(Integer boardId, Integer sessionUserId){
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글 정보를 찾을 수 없습니다."));
+
+        if (! findBoard.getUser().getId().equals(sessionUserId)){
+            throw new ForbiddenException("게시글 접근 권한이 없습니다.");
+        }
+
+        return new BoardResponse.DTO(findBoard);
+    }
+
+    @Transactional
+    public BoardResponse.DTO 게시글수정(BoardRequest.UpdateDTO requestDTO, Integer boardId, Integer sessionUserId){
+
+        Board findBoard = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글 정보를 찾을 수 없습니다."));
+        if (! findBoard.getUser().getId().equals(sessionUserId)){
+            throw new ForbiddenException("게시글 수정 권한이 없습니다.");
+        }
+
+        // 더티 체킹
+        findBoard.update(requestDTO.title(), requestDTO.content());
+        return new BoardResponse.DTO(findBoard);
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.tenco.csr_blog_v1.board;
 
+import com.tenco.csr_blog_v1.core.handlr.errors.UnAuthorizedException;
 import com.tenco.csr_blog_v1.core.util.Resp;
 import com.tenco.csr_blog_v1.user.User;
 import jakarta.validation.Valid;
@@ -36,6 +37,7 @@ public class BoardController {
         return Resp.ok(responseDTO);
     }
 
+    // /api/boards/{boardId}
     @GetMapping("/{boardId}")
     public ResponseEntity<?> detail(@AuthenticationPrincipal User sessionUser,
                                     @PathVariable(name = "boardId") Integer boardId){
@@ -44,8 +46,33 @@ public class BoardController {
         return Resp.ok(responseDTO);
 
     }
-    // /api/boards/{boardId}
 
+
+    @GetMapping("/{boardId}/edit")
+    public ResponseEntity<?> edit(@AuthenticationPrincipal User sessionUser,
+                                  @PathVariable(name = "boardId") Integer boardId){
+        if (sessionUser == null){
+            throw new UnAuthorizedException("로그인이 필요합니다.");
+        }
+        BoardResponse.DTO reponseDTO = boardService.게시글정보(boardId,sessionUser.getId());
+
+        return Resp.ok(reponseDTO);
+    }
+
+    @PutMapping("/{boardId}")
+    public ResponseEntity<?> update(@AuthenticationPrincipal User sessionUser,
+                                    @PathVariable(name = "boardId") Integer boardId,
+                                    @Valid BoardRequest.UpdateDTO requestDTO,
+                                    Errors errors){
+        //Errors(GlobalValidationHandler)를 통해 Put
+
+
+        //  인증 검사 - 인터셉터에 잡힘
+        BoardResponse.DTO responseDTO = boardService.게시글수정(requestDTO,boardId,sessionUser.getId());
+        return Resp.ok(responseDTO);
+
+
+    }
 
 }
 
